@@ -7,6 +7,9 @@ A fake wiki for Locuust. Plain HTML, no framework. Live at https://wiki.locuust.
   (`projects.html` is served at `/projects`), `index.html` for the front page and
   `404.html` for every address that is not a page.
 - `background.webp` - the background picture.
+- `logo-round-256.webp`, `favicon.png`, `apple-touch-icon.png` - the small logo used in the header and as the tab icon. No full-size logo is published here on purpose.
+
+Android and iOS are shown as "planned"; the website is the focus.
 
 Every address is a real file, so `/projects` works when typed, shared or
 refreshed. To add a page: copy an `<article class="pg">` block in

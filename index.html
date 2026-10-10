@@ -139,12 +139,6 @@ blockquote, .say { margin:14px 0; padding:4px 0 4px 14px; border-left:3px solid 
 .say b { color:var(--text); }
 hr { border:0; border-top:1px solid var(--line); margin:18px 0; }
 
-.logos { display:flex; flex-wrap:wrap; gap:18px; margin:12px 0 16px; }
-.logos figure { margin:0; width:200px; border:1px solid var(--line); background:rgba(0,0,0,.4); }
-.logos img { display:block; width:100%; height:auto; background:#000; }
-.logos img:not(.flat) { padding:14px; background:#fff; }   /* the round logo is black on clear; a light backing shows the circle */
-.logos figcaption { display:flex; justify-content:space-between; align-items:center; padding:7px 10px; border-top:1px solid var(--line); font-size:12.5px; }
-
 /* ================================================================ tables */
 table { width:100%; border-collapse:collapse; margin:0 0 14px; font-size:13px; }
 th, td { padding:7px 11px; border:1px solid var(--line); text-align:left; vertical-align:top; }
@@ -224,7 +218,6 @@ footer a { color:var(--muted); }
   .layout > aside { position:static; order:-1; }   /* the infobox leads, as on a phone Wikipedia */
 }
 @media (max-width:640px) {
-  .logos figure { width:calc(50% - 9px); }
   .wrap { padding:18px 16px 36px; border:0; }
   .top { flex-direction:column; gap:8px; }
   .quote { text-align:left; max-width:none; }
@@ -263,7 +256,6 @@ footer a { color:var(--muted); }
               <li><a href="#overview">Overview</a></li>
               <li><a href="#history">History</a></li>
               <li><a href="#features">Features</a></li>
-              <li><a href="#logos">Logos</a></li>
             </ol>
           </div>
 
@@ -283,21 +275,12 @@ footer a { color:var(--muted); }
             <li><b>Comments</b> on single paragraphs</li>
           </ul>
 
-          <h2 id="logos">Logos</h2>
-          <p>The two forms of the Locuust logo. Click Download for the full-size file.</p>
-          <div class="logos">
-            <figure><img src="/logo-round-256.webp" alt="The round Locuust logo" width="256" height="256" loading="lazy"><figcaption><b>Round</b><a href="/logo-round.webp" download>Download</a></figcaption></figure>
-            <figure><img class="flat" src="/logo-mark-768.webp" alt="The Locuust mark on black" width="768" height="768" loading="lazy"><figcaption><b>Mark</b><a href="/logo-mark.png" download>Download</a></figcaption></figure>
-          </div>
-
           <div class="cat">Categories: <a href="/projects">Platforms</a><a href="/projects">Writing tools</a><a href="/goals">Communities</a></div>
         </div>
 
         <aside class="info">
           <section>
             <span class="tag">Locuust</span>
-            <img class="pic" src="/logo-mark-768.webp" alt="The Locuust logo" width="768" height="768">
-            <div class="cap">The Locuust mark</div>
             <div class="row"><em>Locust</em> (<a href="/misspelling">misspelling</a>), the writing platform</div>
             <div class="row"><b style="color:#fff">A public library of serials.</b></div>
           </section>
