@@ -40,7 +40,6 @@
   --line-soft:#2A2E3E;
   --box-line:#fff;
   --head-bg:#2B2B33;
-  --tag:#E8DCC4;               /* the cream bars behind an infobox heading */
   --label:#D77BEA;             /* "Born", "Pronouns"... the magenta labels */
   --ac:#A855F7;
   --ac-soft:#D8B4FE;
@@ -161,8 +160,8 @@ tbody tr:hover td { background:rgba(168,85,247,.08); }
 .info { border:1px solid var(--box-line); text-align:center; font-size:13px; background:rgba(0,0,0,.55); }
 .info > section { padding:12px 14px; border-top:1px solid var(--box-line); }
 .info > section:first-child { border-top:0; background:var(--head-bg); }
-.info .tag { display:inline-block; min-width:150px; padding:2px 14px; margin:0 0 8px; background:var(--tag); color:#fff; font-weight:700; font-size:15px; }
-.info .tag.sm { font-size:13px; color:var(--label); }
+.info .tag { display:inline-block; min-width:150px; padding:3px 14px; margin:0 0 8px; background:linear-gradient(135deg,#7C3AED,var(--ac)); color:#fff; font-weight:700; font-size:15px; box-shadow:0 4px 14px rgba(124,58,237,.35); }
+.info .tag.sm { font-size:13px; background:rgba(168,85,247,.16); border:1px solid rgba(168,85,247,.45); color:var(--ac-soft); box-shadow:none; }
 .info em { font-weight:600; color:var(--text); }
 .info .row { margin:3px 0; }
 .info .row b { color:var(--label); }
