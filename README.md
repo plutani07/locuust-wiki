@@ -1,6 +1,6 @@
 # Locuust Wiki
 
-A fake wiki for Locuust. Plain HTML, no framework. Live at https://wiki.locuust.com
+The Locuust wiki. Plain HTML, no framework. Live at https://wiki.locuust.com
 
 - `wiki.src.html` - the source. **Edit this one.**
 - `build.py` - run `python build.py` after editing. It writes one file per page

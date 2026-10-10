@@ -21,7 +21,7 @@
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:title" content="Locuust Wiki">
-<meta property="og:description" content="A fake wiki for Locuust, the free library.">
+<meta property="og:description" content="The Locuust wiki.">
 <meta property="og:image" content="https://wiki.locuust.com/logo-round-256.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +34,7 @@
   --text:#fff;
   --muted:#A3A8BC;
   --faint:#6B7189;
-  --link:#4A7FE0;              /* wikipedia's blue, lifted a touch to read on black */
+  --link:#4A7FE0;              /* a link blue, lifted a touch to read on black */
   --link-hover:#8AB0FF;
   --line:#4A4F63;
   --line-soft:#2A2E3E;
@@ -113,7 +113,6 @@ a:hover { color:var(--link-hover); }
 .layout.solo > aside { position:static; }
 
 /* ================================================================= text */
-.from { margin:0 0 6px; font-size:12px; color:var(--muted); }
 .hat { margin:10px 0 14px; padding-left:20px; font-size:13px; font-style:italic; color:var(--muted); }
 .hat a { letter-spacing:.12em; }
 h1.title { margin:6px 0 10px; padding-bottom:6px; font-family:var(--serif); font-weight:400; font-size:32px; line-height:1.15; border-bottom:1px solid var(--line); }
@@ -219,7 +218,7 @@ footer a { color:var(--muted); }
 /* =========================================================== small screens */
 @media (max-width:820px) {
   .layout { grid-template-columns:minmax(0,1fr); }
-  .layout > aside { position:static; order:-1; }   /* the infobox leads, as on a phone Wikipedia */
+  .layout > aside { position:static; order:-1; }   /* the infobox leads on a phone */
 }
 @media (max-width:640px) {
   .wrap { padding:18px 16px 36px; border:0; }
@@ -236,13 +235,12 @@ footer a { color:var(--muted); }
 <div class="wrap">
 
   <header class="top">
-    <h1 class="logo"><a href="/"><img class="mark" src="/logo-round-256.webp" alt="" width="46" height="46"><span>Locuust Wiki<small>the free library</small></span></a></h1>
+    <h1 class="logo"><a href="/"><img class="mark" src="/logo-round-256.webp" alt="" width="46" height="46"><span>Locuust Wiki</span></a></h1>
     <p class="quote"><a href="https://locuust.com">"A place to write, and a place to be read"</a></p>
   </header>
   <ul class="nav">
     <li><a href="/">Home</a></li>
     <li><a href="/projects">Projects</a></li>
-    <li><a href="/goals">Goals</a></li>
   </ul>
 
   <main>
@@ -251,8 +249,7 @@ footer a { color:var(--muted); }
     <article class="pg" id="home">
       <div class="layout">
         <div>
-          <p class="from">From Locuust, the free library.</p>
-          <div class="hat">A verse for you, traveller &mdash; <a href="/goals#verse">read it here</a></div>
+          <div class="hat">A verse for you, traveller &mdash; <a href="#verse">read it here</a></div>
 
           <h1 class="title">Locuust</h1>
           <div class="toc"><b>Contents</b>
@@ -260,6 +257,7 @@ footer a { color:var(--muted); }
               <li><a href="#overview">Overview</a></li>
               <li><a href="#history">History</a></li>
               <li><a href="#features">Features</a></li>
+              <li><a href="#verse">A verse for you</a></li>
             </ol>
           </div>
 
@@ -280,7 +278,14 @@ footer a { color:var(--muted); }
             <li><b>Comments</b> on single paragraphs</li>
           </ul>
 
-          <div class="cat">Categories: <a href="/projects">Platforms</a><a href="/projects">Writing tools</a><a href="/goals">Communities</a></div>
+          <h2 id="verse">A verse for you, traveller</h2>
+          <div class="verse">
+            <p class="ar" lang="ar" dir="rtl">لن تنالوا البر حتى تنفقوا مما تحبون وما تنفقوا من شيء فان الله به عليم</p>
+            <p class="en">You will not reach righteousness until you give from what you love. Whatever you give, Allah knows it well.</p>
+            <p class="ref">Surah Ali &lsquo;Imran, 3:92 &middot; <a href="https://quran.com/ali-imran/92">read it on Quran.com</a></p>
+          </div>
+
+          <div class="cat">Categories: <a href="/projects">Platforms</a><a href="/projects">Writing tools</a></div>
         </div>
 
         <aside class="info">
@@ -311,7 +316,6 @@ footer a { color:var(--muted); }
     <!-- ============================== PROJECTS ============================== -->
     <article class="pg" id="projects">
       <div class="layout solo"><div>
-        <p class="from">From Locuust, the free library.</p>
         <h1 class="title">Projects</h1>
         <p>Everything built under the <mark>Locuust</mark> name.</p>
         <div class="cards">
@@ -333,35 +337,9 @@ footer a { color:var(--muted); }
       </div></div>
     </article>
 
-    <!-- ================================ GOALS =============================== -->
-    <article class="pg" id="goals">
-      <div class="layout solo"><div>
-        <p class="from">From Locuust, the free library.</p>
-        <h1 class="title">Goals</h1>
-        <p>What it is for.</p>
-        <ol>
-          <li>A home for serialized fiction that is open to anyone.</li>
-          <li>Writers who keep what they write, offline or not.</li>
-          <li>A community that reads and answers back, paragraph by paragraph.</li>
-        </ol>
-        <h3 id="verse">A verse for you, traveller</h3>
-        <div class="verse">
-          <p class="ar" lang="ar" dir="rtl">لن تنالوا البر حتى تنفقوا مما تحبون وما تنفقوا من شيء فان الله به عليم</p>
-          <p class="en">You will not reach righteousness until you give from what you love. Whatever you give, Allah knows it well.</p>
-          <p class="ref">Surah Ali &lsquo;Imran, 3:92 &middot; <a href="https://quran.com/ali-imran/92">read it on Quran.com</a></p>
-        </div>
-
-        <h3>Words along the way</h3>
-        <blockquote>&ldquo;If you pray for flowers, don’t surprised if it starts to rain.&rdquo; <b>- bvaf</b></blockquote>
-        <blockquote>&ldquo;No routes can go unanswered.&rdquo; <b>- kani</b></blockquote>
-        <div class="cat">Categories: <a href="/">Communities</a></div>
-      </div></div>
-    </article>
-
     <!-- ================= THE PAGES THE LINKS ABOVE POINT AT ================= -->
     <article class="pg on" id="android" data-nav="projects">
       <div class="layout solo"><div>
-        <p class="from">From Locuust, the free library.</p>
         <div class="hat">Part of <a href="/projects">Projects</a></div>
         <h1 class="title">Android app</h1>
         <p>Planned. The <mark>Notebook</mark> in your pocket: stories kept as files on the phone and mirrored to the account afterwards, so a bad connection never costs writing. It has not been published yet.</p>
@@ -373,7 +351,6 @@ footer a { color:var(--muted); }
 
     <article class="pg" id="ios" data-nav="projects">
       <div class="layout solo"><div>
-        <p class="from">From Locuust, the free library.</p>
         <div class="hat">Part of <a href="/projects">Projects</a></div>
         <h1 class="title">iOS app</h1>
         <p>Planned, with the same offline Notebook as the Android app. Until then the <a href="https://locuust.com">website</a> works in a phone's browser.</p>
@@ -384,7 +361,6 @@ footer a { color:var(--muted); }
 
     <article class="pg" id="misspelling" data-nav="home">
       <div class="layout solo"><div>
-        <p class="from">From Locuust, the free library.</p>
         <div class="hat">Redirected from "Locust". Back to <a href="/">Locuust</a></div>
         <h1 class="title">Locust</h1>
         <p>The app was first called Locust. The site is spelled <b>Locuust</b>, with two u's, and "Locust" with one is the misspelling you will see most.</p>
@@ -395,25 +371,23 @@ footer a { color:var(--muted); }
     <!-- every address that is not a page ends here, so no route goes unanswered -->
     <article class="pg" id="notfound" data-nav="home">
       <div class="layout solo"><div>
-        <p class="from">From Locuust, the free library.</p>
         <h1 class="title">This page does not exist yet</h1>
         <p>There is nothing at <code id="nfaddr">this address</code>. Nobody has written it, or the link is wrong.</p>
         <div class="note"><b>Want it written?</b><p>Tell whoever runs this wiki which page you were looking for. Until it exists, <a href="/">the main page</a> is the way back.</p></div>
         <div class="cards">
           <a class="card" href="/"><span class="k">Start</span><b>Main page</b><span>Locuust, in short.</span></a>
           <a class="card" href="/projects"><span class="k">Browse</span><b>Projects</b><span>What has been built.</span></a>
-          <a class="card" href="/goals"><span class="k">Read</span><b>Goals</b><span>What it is for.</span></a>
         </div>
       </div></div>
     </article>
 
   </main>
 
-  <footer>This wiki is a parody of a well known encyclopedia and is not affiliated with it. &middot; <a href="https://locuust.com">locuust.com</a></footer>
+  <footer>Locuust Wiki &middot; <a href="https://locuust.com">locuust.com</a></footer>
 </div>
 
 <script>
-/* Pages are paths: /projects, /goals ... Each is also a real file, so this only
+/* Pages are paths: /projects, /android ... Each is also a real file, so this only
    keeps the address bar honest while you click around, and answers every
    address that is not a page with "does not exist yet". Parts of a page
    (#overview, #ref1) stay hashes. */

@@ -6,7 +6,7 @@ a real address, and 404.html answers everything else.
 """
 import re
 
-PAGES = ['home', 'projects', 'goals', 'android', 'ios', 'misspelling', 'notfound']      # the ids of the pages (<article class="pg" id="...">); "notfound" is 404.html
+PAGES = ['home', 'projects', 'android', 'ios', 'misspelling', 'notfound']      # the ids of the pages (<article class="pg" id="...">); "notfound" is 404.html
 SRC = open("wiki.src.html", encoding="utf8").read()
 
 
