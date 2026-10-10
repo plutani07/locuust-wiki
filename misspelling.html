@@ -1,0 +1,573 @@
+<!doctype html>
+<!--
+  LOCUUST WIKI - source. Do not upload this file; run build.py.
+
+  Edit this file, then run `python build.py`. It writes one file per page
+  (projects.html is served at /projects, as GitHub Pages drops the .html),
+  index.html for the front page and 404.html for every address that is not a
+  page. All of them are this same document with a different page switched on,
+  so each address is a real file and works even with no script. A small script
+  at the foot keeps the address bar in step when you click between pages.
+
+  To add a page: copy an <article class="pg"> block, give it a new id, link to
+  it as href="/that-id", and add the id to PAGES in build.py.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Locust - Locuust Wiki</title>
+<meta name="theme-color" content="#08090F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sen:wght@700&display=swap">
+<style>
+/* ================================================================ tokens */
+:root {
+  --void:#08090F;
+  --paper:rgba(4,4,10,.84);   /* the article column: dark glass over the picture */
+  --text:#fff;
+  --muted:#A3A8BC;
+  --faint:#6B7189;
+  --link:#4A7FE0;              /* wikipedia's blue, lifted a touch to read on black */
+  --link-hover:#8AB0FF;
+  --line:#4A4F63;
+  --line-soft:#2A2E3E;
+  --box-line:#fff;
+  --head-bg:#2B2B33;
+  --tag:#E8DCC4;               /* the cream bars behind an infobox heading */
+  --label:#D77BEA;             /* "Born", "Pronouns"... the magenta labels */
+  --ac:#A855F7;
+  --ac-soft:#D8B4FE;
+  --wikilink:rgba(168,85,247,.40);
+  --ember:#E5342B;
+  --gold:#E9B949;
+  --ok:#3DD68C;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:16px; }
+
+/* ============================================================ background */
+/* The picture is fixed to the window, not the page, so the splash stays at the
+   bottom right while the article scrolls over it. A dark wash on the left keeps
+   the words readable on a wide screen; the picture's own colour does the rest. */
+body {
+  margin:0; min-height:100vh;
+  color:var(--text); font-family:var(--sans); font-size:14px; line-height:1.6;
+  background:var(--void) url("/background.webp") no-repeat right bottom / cover fixed;
+  -webkit-font-smoothing:antialiased;
+}
+body:before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:linear-gradient(90deg, rgba(4,4,10,.55) 0%, rgba(4,4,10,.15) 55%, rgba(4,4,10,0) 100%);
+}
+/* iOS ignores background-attachment:fixed on body; give it the same picture on
+   a fixed layer instead */
+@supports (-webkit-touch-callout:none) {
+  body { background:var(--void); }
+  body:after { content:""; position:fixed; inset:0; z-index:-2; background:url("/background.webp") no-repeat right bottom / cover; }
+}
+::selection { background:rgba(168,85,247,.5); color:#fff; }
+a { color:var(--link); text-decoration:underline; text-underline-offset:2px; }
+a:hover { color:var(--link-hover); }
+:focus-visible { outline:2px solid var(--ac); outline-offset:2px; border-radius:2px; }
+
+/* The column the article sits in */
+.wrap {
+  max-width:1020px; margin:0 auto; padding:26px 28px 44px; min-height:100vh;
+  background:var(--paper);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  border-left:1px solid var(--line-soft); border-right:1px solid var(--line-soft);
+  box-shadow:0 0 80px rgba(0,0,0,.6);
+}
+@media (min-width:1100px) { .wrap { margin-top:24px; margin-bottom:24px; min-height:calc(100vh - 48px); border:1px solid var(--line-soft); border-radius:6px; } }
+
+/* =============================================================== masthead */
+.top { display:flex; justify-content:space-between; align-items:flex-start; gap:24px; }
+.logo { margin:0; font-family:var(--serif); font-weight:400; font-size:36px; line-height:1.1; letter-spacing:-.005em; }
+.logo a { color:var(--text); text-decoration:none; }
+.logo small { display:block; margin-top:2px; font-family:var(--sans); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ac-soft); }
+.quote { max-width:300px; margin:0; text-align:right; font-family:Sen,var(--sans); font-weight:700; font-size:13px; line-height:1.4; }
+.quote a { color:#7B83FF; }
+.nav { display:flex; justify-content:center; flex-wrap:wrap; gap:6px 24px; margin:14px 0 0; padding:0 0 10px; list-style:none; border-bottom:1px solid var(--line); }
+.nav a { font-size:13px; }
+
+/* ================================================================= pages */
+.pg { display:none; animation:rise .25s var(--ease); }
+.pg.on { display:block; }
+@keyframes rise { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+.nav a[aria-current="page"] { color:var(--text); text-decoration:none; font-weight:600; border-bottom:2px solid var(--ac); padding-bottom:3px; }
+
+.layout { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:30px; margin-top:18px; align-items:start; }
+.layout.solo { grid-template-columns:minmax(0,1fr); }
+.layout > aside { position:sticky; top:16px; }
+.layout.solo > aside { position:static; }
+
+/* ================================================================= text */
+.from { margin:0 0 6px; font-size:12px; color:var(--muted); }
+.hat { margin:10px 0 14px; padding-left:20px; font-size:13px; font-style:italic; color:var(--muted); }
+.hat a { letter-spacing:.12em; }
+h1.title { margin:6px 0 10px; padding-bottom:6px; font-family:var(--serif); font-weight:400; font-size:32px; line-height:1.15; border-bottom:1px solid var(--line); }
+h2 { margin:22px 0 8px; padding-bottom:3px; font-family:var(--serif); font-weight:400; font-size:24px; line-height:1.25; border-bottom:1px solid var(--line); }
+h3 { margin:16px 0 6px; font-family:var(--serif); font-weight:700; font-size:17px; }
+h4 { margin:14px 0 4px; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+p { margin:0 0 12px; }
+ul, ol { margin:0 0 12px; padding-left:22px; }
+li { margin-bottom:3px; }
+ul li::marker { color:var(--ac); }
+ol li::marker { color:var(--ac-soft); font-weight:600; }
+b, strong { font-weight:600; }
+em { color:var(--ac-soft); }
+code, kbd { font-family:ui-monospace,Consolas,monospace; font-size:.9em; padding:1px 6px; background:#1A1E2B; border:1px solid var(--line-soft); border-radius:4px; color:var(--ac-soft); }
+/* a name that links elsewhere in the wiki: violet behind it */
+mark { background:var(--wikilink); color:var(--text); padding:0 3px; border-radius:2px; }
+mark a { color:var(--text); text-decoration:none; }
+a[href^="http"]:not(.nolink):not(.btn):not(.card):not(.chip):after { content:" \2197"; font-size:.78em; color:var(--faint); }
+.logo a:after, .quote a:after, .nav a:after, .card:after, footer a:after, .info a:after { content:none !important; }
+.red { color:#FF6B63; }   /* a page nobody has written yet */
+blockquote, .say { margin:14px 0; padding:4px 0 4px 14px; border-left:3px solid var(--ac); font-size:13.5px; color:var(--muted); }
+.say b { color:var(--text); }
+hr { border:0; border-top:1px solid var(--line); margin:18px 0; }
+
+/* ================================================================ tables */
+table { width:100%; border-collapse:collapse; margin:0 0 14px; font-size:13px; }
+th, td { padding:7px 11px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+th { background:var(--head-bg); font-weight:600; }
+tbody tr:hover td { background:rgba(168,85,247,.08); }
+.scroll { overflow-x:auto; }
+
+/* ============================================================== contents */
+.toc { display:inline-block; min-width:230px; max-width:100%; margin:4px 0 12px; padding:10px 18px 8px; border:1px solid var(--line); background:rgba(255,255,255,.02); font-size:13px; }
+.toc b { display:block; text-align:center; margin-bottom:4px; font-family:var(--serif); font-size:15px; font-weight:400; }
+.toc ol { margin:0; padding-left:20px; }
+.toc ol ol { padding-left:16px; }
+
+/* =============================================================== infobox */
+.info { border:1px solid var(--box-line); text-align:center; font-size:13px; background:rgba(0,0,0,.55); }
+.info > section { padding:12px 14px; border-top:1px solid var(--box-line); }
+.info > section:first-child { border-top:0; background:var(--head-bg); }
+.info .tag { display:inline-block; min-width:150px; padding:2px 14px; margin:0 0 8px; background:var(--tag); color:#fff; font-weight:700; font-size:15px; }
+.info .tag.sm { font-size:13px; color:var(--label); }
+.info em { font-weight:600; color:var(--text); }
+.info .row { margin:3px 0; }
+.info .row b { color:var(--label); }
+.info .pic { display:block; width:100%; height:auto; margin:0 0 8px; background:#0b0c14; border:1px solid var(--box-line); padding:6px; }
+.info .cap { font-size:12px; color:var(--muted); margin-bottom:4px; }
+
+/* ================================================================ notices */
+.note { --c:var(--ac); margin:12px 0; padding:11px 14px 11px 16px; border:1px solid var(--line); border-left:4px solid var(--c); background:rgba(255,255,255,.025); font-size:13.5px; }
+.note b { display:block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--c); margin-bottom:2px; }
+.note p:last-child { margin-bottom:0; }
+.note.warn { --c:var(--gold); } .note.danger { --c:var(--ember); } .note.ok { --c:var(--ok); }
+
+/* =============================================================== spoilers */
+details.spoiler { margin:12px 0; border:1px solid var(--line); background:rgba(255,255,255,.025); }
+details.spoiler > summary { cursor:pointer; list-style:none; padding:9px 14px; font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); display:flex; gap:10px; align-items:center; }
+details.spoiler > summary::-webkit-details-marker { display:none; }
+details.spoiler > summary:before { content:"\25B8"; color:var(--ac); transition:transform .2s var(--ease); }
+details.spoiler[open] > summary:before { transform:rotate(90deg); }
+details.spoiler > summary:hover { color:#fff; background:rgba(168,85,247,.1); }
+details.spoiler > div { padding:2px 14px 12px; }
+.hide { background:var(--faint); color:transparent; border-radius:3px; padding:0 4px; cursor:pointer; transition:background .2s, color .2s; }
+.hide:hover, .hide:focus, .hide:active { background:rgba(168,85,247,.25); color:var(--text); }
+
+/* ================================================================== chips */
+.chips { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 12px; }
+.chip { display:inline-block; padding:2px 11px; border-radius:999px; background:rgba(168,85,247,.16); border:1px solid rgba(168,85,247,.4); font-size:12px; font-weight:600; color:var(--ac-soft); text-decoration:none; }
+a.chip:hover { background:var(--ac); color:#fff; }
+.chip.ok { background:rgba(61,214,140,.12); border-color:rgba(61,214,140,.4); color:var(--ok); }
+.chip.warn { background:rgba(233,185,73,.12); border-color:rgba(233,185,73,.4); color:var(--gold); }
+.chip.danger { background:rgba(229,52,43,.14); border-color:rgba(229,52,43,.45); color:#FF8A80; }
+
+/* ================================================================== cards */
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+.card { display:block; padding:14px; border:1px solid var(--line); background:rgba(255,255,255,.03); color:var(--text); text-decoration:none; transition:transform .18s var(--ease), border-color .18s, background .18s; }
+.card:hover { transform:translateY(-3px); border-color:var(--ac); background:rgba(168,85,247,.1); color:var(--text); }
+.card .k { display:block; margin-bottom:4px; font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ac-soft); }
+.card b { display:block; font-family:var(--serif); font-weight:400; font-size:18px; margin-bottom:2px; }
+.card span:not(.k) { font-size:12.5px; color:var(--muted); }
+
+/* ============================================================== buttons */
+.btn { display:inline-block; padding:7px 18px; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.04); color:var(--text); font-weight:600; font-size:13px; text-decoration:none; transition:background .15s, border-color .15s, transform .15s var(--ease); }
+.btn:hover { background:rgba(168,85,247,.2); border-color:var(--ac); color:#fff; transform:translateY(-1px); }
+.btn.pri { background:linear-gradient(180deg,var(--ac),#7C3AED); border-color:transparent; box-shadow:0 6px 18px rgba(124,58,237,.4); }
+
+/* ============================================================ footers etc */
+.cat { margin-top:22px; padding:8px 12px; border:1px solid var(--line); background:rgba(255,255,255,.02); font-size:12.5px; color:var(--muted); }
+.cat a + a:before { content:" | "; color:var(--faint); text-decoration:none; display:inline-block; }
+.refs { margin-top:22px; padding-top:8px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted); }
+.refs ol { margin:0; }
+footer { margin-top:30px; padding-top:10px; border-top:1px solid var(--line); font-size:12px; color:var(--faint); text-align:center; }
+footer a { color:var(--muted); }
+.demo { margin:8px 0 4px; padding:12px; border:1px dashed var(--line); background:rgba(0,0,0,.25); }
+.how { margin:2px 0 6px; font-size:12px; color:var(--faint); }
+
+/* =========================================================== small screens */
+@media (max-width:820px) {
+  .layout { grid-template-columns:minmax(0,1fr); }
+  .layout > aside { position:static; order:-1; }   /* the infobox leads, as on a phone Wikipedia */
+}
+@media (max-width:640px) {
+  .wrap { padding:18px 16px 36px; border:0; }
+  .top { flex-direction:column; gap:8px; }
+  .quote { text-align:left; max-width:none; }
+  .logo { font-size:30px; }
+  body { background-position:70% bottom; }
+}
+@media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .pg { animation:none; } *, *:before { transition-duration:.01ms !important; } }
+@media print { body { background:#fff; color:#000; } .wrap { background:#fff; border:0; box-shadow:none; backdrop-filter:none; } a { color:#000; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1 class="logo"><a href="/">Locuust Wiki<small>the free library</small></a></h1>
+    <p class="quote"><a href="https://locuust.com">"A place to write, and a place to be read"</a></p>
+  </header>
+  <ul class="nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/projects">Projects</a></li>
+    <li><a href="/goals">Goals</a></li>
+    <li><a href="/guide">Style guide</a></li>
+  </ul>
+
+  <main>
+
+    <!-- ================================ HOME ================================ -->
+    <article class="pg" id="home">
+      <div class="layout">
+        <div>
+          <p class="from">From Locuust, the free library.</p>
+          <div class="hat">A verse for you, traveller &mdash; <a href="/goals">read it here</a></div>
+
+          <h1 class="title">Locuust</h1>
+          <div class="toc"><b>Contents</b>
+            <ol>
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#history">History</a></li>
+              <li><a href="#features">Features</a></li>
+            </ol>
+          </div>
+
+          <h2 id="overview">Overview</h2>
+          <p><mark>Locuust</mark> is a writing platform where serialized fiction is written in a notebook that keeps working offline, and published for anyone to read. It is open to everyone, and meant to be a better home for stories than the sites that came before it.</p>
+          <p>Writers keep their work on their own device and mirror it to an account. <mark><a href="/projects">Readers</a></mark> find that work on Home, save it to a Library, and talk to each other under each paragraph.</p>
+          <p>It is best known for the <mark>Notebook</mark>, a writing desk with no cloud in the way, and for being <b>built by writers</b>.</p>
+          <div class="say">"Write it down before it leaves." <b>- the founders</b></div>
+
+          <h2 id="history">History</h2>
+          <p>Locuust began as a private app for a handful of friends who wrote serials together. It opened to search engines on <b>10 October 2026</b>.</p>
+
+          <h2 id="features">Features</h2>
+          <ul>
+            <li><b>Notebook</b> - offline-first writing, one story per file</li>
+            <li><b>Shared stories</b> - up to four writers on one serial, merged live</li>
+            <li><b>Reading lists</b> - your own picks, in your own order</li>
+            <li><b>Comments</b> on single paragraphs</li>
+          </ul>
+
+          <div class="cat">Categories: <a href="/projects">Platforms</a><a href="/projects">Writing tools</a><a href="/goals">Communities</a></div>
+        </div>
+
+        <aside class="info">
+          <section>
+            <span class="tag">Locuust</span>
+            <div class="row"><em>Locust</em> (<a href="/misspelling">misspelling</a>), the writing platform</div>
+            <div class="row"><b style="color:#fff">A public library of serials.</b></div>
+          </section>
+          <section>
+            <span class="tag sm">Details</span>
+            <div class="row"><b>Founded</b> - 2026</div>
+            <div class="row"><b>Kind</b> - Writing platform</div>
+            <div class="row"><b>Platforms</b> - Web &bull; Android</div>
+            <div class="row"><b>Years active</b> - 2026&rarr;present</div>
+          </section>
+          <section>
+            <div class="row"><b>Cost</b> - Free</div>
+            <div class="row"><b>Language</b> - English</div>
+            <div class="row"><b>Reading</b> - Needs an account</div>
+            <div class="row"><b>Website</b> - <a href="https://locuust.com">locuust.com</a></div>
+          </section>
+        </aside>
+      </div>
+    </article>
+
+    <!-- ============================== PROJECTS ============================== -->
+    <article class="pg" id="projects">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <h1 class="title">Projects</h1>
+        <p>Everything built under the <mark>Locuust</mark> name.</p>
+        <div class="cards">
+          <a class="card" href="https://locuust.com"><span class="k">Web</span><b>Locuust</b><span>The writing platform itself.</span></a>
+          <a class="card" href="/android"><span class="k">Android</span><b>The app</b><span>The Notebook, offline.</span></a>
+          <a class="card" href="/guide"><span class="k">Wiki</span><b>This wiki</b><span>What you are reading.</span></a>
+        </div>
+        <h2>Status</h2>
+        <div class="scroll"><table>
+          <thead><tr><th>Project</th><th>Role</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://locuust.com">Locuust</a></td><td>Writing platform</td><td><span class="chip ok">Live</span></td></tr>
+            <tr><td><a href="/android">Android app</a></td><td>Offline Notebook</td><td><span class="chip ok">Live</span></td></tr>
+            <tr><td><a href="/ios">iOS app</a></td><td>Offline Notebook</td><td><span class="chip warn">Planned</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><b>Note</b><p>A <a href="/missing" class="red">red link</a> is a page nobody has written yet. It still goes somewhere: to <a href="/notfound">a page that says so</a>.</p></div>
+        <div class="cat">Categories: <a href="/">Platforms</a><a href="/">Writing tools</a></div>
+      </div></div>
+    </article>
+
+    <!-- ================================ GOALS =============================== -->
+    <article class="pg" id="goals">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <h1 class="title">Goals</h1>
+        <p>What it is for.</p>
+        <ol>
+          <li>A home for serialized fiction that is open to anyone.</li>
+          <li>Writers who keep what they write, offline or not.</li>
+          <li>A community that reads and answers back, paragraph by paragraph.</li>
+        </ol>
+        <h3>A verse for you, traveller</h3>
+        <blockquote>Put your own words here. <b>- whoever wrote them</b></blockquote>
+        <div class="cat">Categories: <a href="/">Communities</a></div>
+      </div></div>
+    </article>
+
+    <!-- ============================== STYLE GUIDE =========================== -->
+    <article class="pg" id="guide">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <h1 class="title">Style guide</h1>
+        <p>Every piece this wiki has. Copy the markup from this file's source; each block is plain HTML.</p>
+
+        <h2>Text</h2>
+        <p>Body text with a <a href="/guide">wiki link</a>, an <a href="https://locuust.com">outside link</a>, a <a href="/missing" class="red">red link</a>, a <mark>highlighted name</mark>, <b>bold</b>, <em>italic</em> and <code>code</code>.</p>
+        <h3>A sub-section</h3>
+        <h4>A small label</h4>
+        <blockquote>A quote from the story, set off in violet.</blockquote>
+        <ul><li>A bullet</li><li>Another<ul><li>Nested</li></ul></li></ul>
+        <ol><li>First</li><li>Second</li></ol>
+
+        <h2>Notices</h2>
+        <div class="note"><b>Note</b><p>A plain note.</p></div>
+        <div class="note warn"><b>Spoilers</b><p>Everything below covers the whole serial.</p></div>
+        <div class="note danger"><b>Content warning</b><p>Mentions of violence and loss.</p></div>
+        <div class="note ok"><b>Canon</b><p>Confirmed by the writer.</p></div>
+
+        <h2>Spoilers</h2>
+        <details class="spoiler"><summary>Spoiler: what happens in part 12</summary><div>Write the spoiler here. It can hold several paragraphs and <a href="/guide">links</a>.</div></details>
+        <p>The killer turns out to be <span class="hide" tabindex="0">the narrator</span>.</p>
+
+        <h2>Chips</h2>
+        <div class="chips">
+          <a class="chip" href="/tags">Fantasy</a><a class="chip" href="/tags">Slow burn</a>
+          <span class="chip ok">Complete</span><span class="chip warn">On hiatus</span><span class="chip danger">Mature</span>
+        </div>
+
+        <h2>Cards</h2>
+        <div class="cards">
+          <a class="card" href="/characters"><span class="k">Who</span><b>Characters</b><span>Everyone in the stories.</span></a>
+          <a class="card" href="/places"><span class="k">Where</span><b>Places</b><span>Maps and cities.</span></a>
+          <a class="card" href="/timeline"><span class="k">When</span><b>Timeline</b><span>What happened, in order.</span></a>
+        </div>
+
+        <h2>Buttons</h2>
+        <p><a class="btn pri" href="https://locuust.com">Open Locuust</a> <a class="btn" href="/">Back to the main page</a></p>
+
+        <h2>Table</h2>
+        <div class="scroll"><table>
+          <thead><tr><th>Part</th><th>Title</th><th>Released</th></tr></thead>
+          <tbody><tr><td>1</td><td><a href="/guide">The Lamp</a></td><td>2026-10-01</td></tr><tr><td>2</td><td>Oil</td><td>2026-10-04</td></tr></tbody>
+        </table></div>
+
+        <h2>Infobox</h2>
+        <p class="how">The box beside the Home article. It stacks above the text on a phone.</p>
+        <div class="demo" style="max-width:320px">
+          <aside class="info">
+            <section><span class="tag">Name</span><div class="row"><em>Alias</em> (translation)</div><div class="row"><b style="color:#fff">One line about them.</b></div></section>
+            <section><span class="tag sm">Details</span><div class="row"><b>Born</b> - Date</div><div class="row"><b>Role</b> - Writer</div></section>
+          </aside>
+        </div>
+
+        <h2>References</h2>
+        <p>A claim that needs a source.<sup><a href="#ref1">[1]</a></sup></p>
+        <div class="refs"><ol><li id="ref1">Part 3, "The Lamp". <a href="https://locuust.com">Locuust</a>.</li></ol></div>
+
+        <div class="cat">Categories: <a href="/">Wiki</a><a href="/">Help</a></div>
+      </div></div>
+    </article>
+
+    <!-- ================= THE PAGES THE LINKS ABOVE POINT AT ================= -->
+    <article class="pg" id="android" data-nav="projects">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Part of <a href="/projects">Projects</a></div>
+        <h1 class="title">Android app</h1>
+        <p>The <mark>Notebook</mark> in your pocket. Stories are kept as files on the phone and mirrored to the account afterwards, so a bad connection never costs writing.</p>
+        <h2>What it does</h2>
+        <ul><li>Writes with no connection at all</li><li>Mirrors to the account when it can</li><li>Rings when someone follows, comments or asks you to write together</li></ul>
+        <div class="note warn"><b>Careful</b><p>Uninstalling the app deletes the writing stored on the phone. Sign in and let it mirror first.</p></div>
+        <div class="cat">Categories: <a href="/projects">Platforms</a></div>
+      </div></div>
+    </article>
+
+    <article class="pg" id="ios" data-nav="projects">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Part of <a href="/projects">Projects</a></div>
+        <h1 class="title">iOS app</h1>
+        <p>Planned, with the same offline Notebook as the Android app. Until then the <a href="https://locuust.com">website</a> works in a phone's browser.</p>
+        <div class="chips"><span class="chip warn">Planned</span></div>
+        <div class="cat">Categories: <a href="/projects">Platforms</a></div>
+      </div></div>
+    </article>
+
+    <article class="pg on" id="misspelling" data-nav="home">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Redirected from "Locust". Back to <a href="/">Locuust</a></div>
+        <h1 class="title">Locust</h1>
+        <p>The app was first called Locust. The site is spelled <b>Locuust</b>, with two u's, and "Locust" with one is the misspelling you will see most.</p>
+        <div class="cat">Categories: <a href="/">Platforms</a></div>
+      </div></div>
+    </article>
+
+    <article class="pg" id="characters" data-nav="guide">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
+        <h1 class="title">Characters</h1>
+        <p>An example listing page. Each row would open that character's own page, with an infobox.</p>
+        <div class="scroll"><table>
+          <thead><tr><th>Name</th><th>Role</th><th>First seen</th></tr></thead>
+          <tbody><tr><td><a href="/notfound">Example one</a></td><td>Lead</td><td>Part 1</td></tr><tr><td><a href="/notfound">Example two</a></td><td>Rival</td><td>Part 3</td></tr></tbody>
+        </table></div>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
+      </div></div>
+    </article>
+
+    <article class="pg" id="places" data-nav="guide">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
+        <h1 class="title">Places</h1>
+        <p>An example listing page for maps, cities and rooms.</p>
+        <div class="cards">
+          <a class="card" href="/notfound"><span class="k">City</span><b>Example city</b><span>Where it starts.</span></a>
+          <a class="card" href="/notfound"><span class="k">Room</span><b>Example room</b><span>Where it ends.</span></a>
+        </div>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
+      </div></div>
+    </article>
+
+    <article class="pg" id="timeline" data-nav="guide">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
+        <h1 class="title">Timeline</h1>
+        <p>An example timeline, in order.</p>
+        <ol><li><b>Year 1</b> - the first thing happens.</li><li><b>Year 2</b> - the second thing happens, and <a href="/characters">someone</a> is there.</li><li><b>Year 3</b> - <a href="/places">somewhere</a> changes.</li></ol>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
+      </div></div>
+    </article>
+
+    <article class="pg" id="tags" data-nav="guide">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
+        <h1 class="title">Tags</h1>
+        <p>A tag groups stories. On <a href="https://locuust.com">Locuust</a> every tag has its own page of stories, best first.</p>
+        <div class="chips"><span class="chip">Fantasy</span><span class="chip">Slow burn</span><span class="chip ok">Complete</span><span class="chip warn">On hiatus</span><span class="chip danger">Mature</span></div>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
+      </div></div>
+    </article>
+
+    <!-- every address that is not a page ends here, so no route goes unanswered -->
+    <article class="pg" id="notfound" data-nav="home">
+      <div class="layout solo"><div>
+        <p class="from">From Locuust, the free library.</p>
+        <h1 class="title">This page does not exist yet</h1>
+        <p>There is nothing at <code id="nfaddr">this address</code>. Nobody has written it, or the link is wrong.</p>
+        <div class="note"><b>Want it written?</b><p>Tell whoever runs this wiki which page you were looking for. Until it exists, <a href="/">the main page</a> is the way back.</p></div>
+        <div class="cards">
+          <a class="card" href="/"><span class="k">Start</span><b>Main page</b><span>Locuust, in short.</span></a>
+          <a class="card" href="/projects"><span class="k">Browse</span><b>Projects</b><span>What has been built.</span></a>
+          <a class="card" href="/guide"><span class="k">Help</span><b>Style guide</b><span>Every piece of this wiki.</span></a>
+        </div>
+      </div></div>
+    </article>
+
+  </main>
+
+  <footer>This wiki is a parody of a well known encyclopedia and is not affiliated with it. &middot; <a href="https://locuust.com">locuust.com</a></footer>
+</div>
+
+<script>
+/* Pages are paths: /projects, /guide ... Each is also a real file, so this only
+   keeps the address bar honest while you click around, and answers every
+   address that is not a page with "does not exist yet". Parts of a page
+   (#overview, #ref1) stay hashes. */
+(function () {
+  var d = document, root = d.documentElement;
+  root.classList.add('js');
+  var pages = [].slice.call(d.querySelectorAll('.pg'));
+  var links = [].slice.call(d.querySelectorAll('.nav a'));
+  var current = null;
+  function find(id) { var e = id && d.getElementById(id); return e && e.classList.contains('pg') ? e : null; }
+  function pathId() {
+    var p = location.pathname.replace(/\/index\.html$/, '').replace(/\.html$/, '').replace(/^\/+|\/+$/g, '');
+    try { p = decodeURIComponent(p); } catch (e) {}
+    return p;
+  }
+  function show() {
+    var id = pathId();
+    var hash = location.hash.slice(1);
+    /* an old-style address, /#projects, becomes /projects */
+    if (!id && find(hash)) { history.replaceState(null, '', hash === 'home' ? '/' : '/' + hash); id = hash === 'home' ? '' : hash; hash = ''; }
+    var pg = !id ? find('home') : id === 'missing' ? null : find(id);
+    var real = !!pg && pg.id !== 'notfound';
+    if (!pg) pg = find('notfound');
+    if (pg.id === 'notfound') {
+      var a = d.getElementById('nfaddr');
+      if (a) a.textContent = id && id !== 'missing' ? location.pathname : 'a page that has not been written';
+    } else {
+      /* /projects/ and /projects.html read as /projects */
+      var want = pg.id === 'home' ? '/' : '/' + pg.id;
+      if (location.pathname !== want) history.replaceState(null, '', want + location.hash);
+    }
+    pages.forEach(function (p) { p.classList.toggle('on', p === pg); });
+    var nav = pg.getAttribute('data-nav') || pg.id;
+    var key = nav === 'home' ? '/' : '/' + nav;
+    links.forEach(function (l) {
+      if (l.getAttribute('href') === key) l.setAttribute('aria-current', 'page'); else l.removeAttribute('aria-current');
+    });
+    var h = pg.querySelector('h1.title');
+    d.title = (h ? h.textContent + ' - ' : '') + 'Locuust Wiki';
+    var changed = pg !== current;
+    current = pg;
+    var el = hash ? d.getElementById(hash) : null;
+    if (el && pg.contains(el)) el.scrollIntoView();
+    else if (changed) window.scrollTo(0, 0);
+  }
+  d.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.target || a.hasAttribute('download')) return;
+    var href = a.getAttribute('href');
+    if (href.charAt(0) !== '/' || href.charAt(1) === '/') return;
+    e.preventDefault();
+    if (href !== location.pathname + location.hash) history.pushState(null, '', href);
+    show();
+  });
+  window.addEventListener('popstate', show);
+  window.addEventListener('hashchange', show);
+  show();
+})();
+</script>
+</body>
+</html>

@@ -1,15 +1,16 @@
 <!doctype html>
 <!--
-  LOCUUST WIKI - the whole wiki in one file.
+  LOCUUST WIKI - source. Do not upload this file; run build.py.
 
-  Keep background.webp in the same folder as this file. Nothing else is needed:
-  no Carrd, no Embed, no script. Host the two files on any static host (GitHub
-  Pages, Netlify Drop, Cloudflare Pages, or Locuust's hosting under /wiki).
+  Edit this file, then run `python build.py`. It writes one file per page
+  (projects.html is served at /projects, as GitHub Pages drops the .html),
+  index.html for the front page and 404.html for every address that is not a
+  page. All of them are this same document with a different page switched on,
+  so each address is a real file and works even with no script. A small script
+  at the foot keeps the address bar in step when you click between pages.
 
-  Pages are sections shown by their #address, so the nav works with nothing
-  running: #home, #projects, #goals, #guide. To add a page, copy an <article
-  class="pg"> block, give it a new id, and add a link in the nav. The Guide page
-  shows every piece the stylesheet has, ready to copy.
+  To add a page: copy an <article class="pg"> block, give it a new id, link to
+  it as href="/that-id", and add the id to PAGES in build.py.
 -->
 <html lang="en">
 <head>
@@ -56,7 +57,7 @@ html { scroll-behavior:smooth; scroll-padding-top:16px; }
 body {
   margin:0; min-height:100vh;
   color:var(--text); font-family:var(--sans); font-size:14px; line-height:1.6;
-  background:var(--void) url("background.webp") no-repeat right bottom / cover fixed;
+  background:var(--void) url("/background.webp") no-repeat right bottom / cover fixed;
   -webkit-font-smoothing:antialiased;
 }
 body:before {
@@ -67,7 +68,7 @@ body:before {
    a fixed layer instead */
 @supports (-webkit-touch-callout:none) {
   body { background:var(--void); }
-  body:after { content:""; position:fixed; inset:0; z-index:-2; background:url("background.webp") no-repeat right bottom / cover; }
+  body:after { content:""; position:fixed; inset:0; z-index:-2; background:url("/background.webp") no-repeat right bottom / cover; }
 }
 ::selection { background:rgba(168,85,247,.5); color:#fff; }
 a { color:var(--link); text-decoration:underline; text-underline-offset:2px; }
@@ -98,15 +99,7 @@ a:hover { color:var(--link-hover); }
 .pg { display:none; animation:rise .25s var(--ease); }
 .pg.on { display:block; }
 @keyframes rise { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
-/* With no script the four main addresses still work by :target; anything else
-   shows Home. The script at the foot answers every other address. */
-html:not(.js) .pg:target, html:not(.js) .wrap:not(:has(.pg:target)) #home { display:block; }
 .nav a[aria-current="page"] { color:var(--text); text-decoration:none; font-weight:600; border-bottom:2px solid var(--ac); padding-bottom:3px; }
-html:not(.js) .wrap:not(:has(.pg:target)) .nav a[href="#home"],
-html:not(.js) .wrap:has(#home:target) .nav a[href="#home"],
-html:not(.js) .wrap:has(#projects:target) .nav a[href="#projects"],
-html:not(.js) .wrap:has(#goals:target) .nav a[href="#goals"],
-html:not(.js) .wrap:has(#guide:target) .nav a[href="#guide"] { color:var(--text); text-decoration:none; font-weight:600; border-bottom:2px solid var(--ac); padding-bottom:3px; }
 
 .layout { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:30px; margin-top:18px; align-items:start; }
 .layout.solo { grid-template-columns:minmax(0,1fr); }
@@ -232,24 +225,24 @@ footer a { color:var(--muted); }
 <div class="wrap">
 
   <header class="top">
-    <h1 class="logo"><a href="#home">Locuust Wiki<small>the free library</small></a></h1>
+    <h1 class="logo"><a href="/">Locuust Wiki<small>the free library</small></a></h1>
     <p class="quote"><a href="https://locuust.com">"A place to write, and a place to be read"</a></p>
   </header>
   <ul class="nav">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#goals">Goals</a></li>
-    <li><a href="#guide">Style guide</a></li>
+    <li><a href="/">Home</a></li>
+    <li><a href="/projects">Projects</a></li>
+    <li><a href="/goals">Goals</a></li>
+    <li><a href="/guide">Style guide</a></li>
   </ul>
 
   <main>
 
     <!-- ================================ HOME ================================ -->
-    <article class="pg" id="home">
+    <article class="pg on" id="home">
       <div class="layout">
         <div>
           <p class="from">From Locuust, the free library.</p>
-          <div class="hat">A verse for you, traveller &mdash; <a href="#goals">read it here</a></div>
+          <div class="hat">A verse for you, traveller &mdash; <a href="/goals">read it here</a></div>
 
           <h1 class="title">Locuust</h1>
           <div class="toc"><b>Contents</b>
@@ -262,7 +255,7 @@ footer a { color:var(--muted); }
 
           <h2 id="overview">Overview</h2>
           <p><mark>Locuust</mark> is a writing platform where serialized fiction is written in a notebook that keeps working offline, and published for anyone to read. It is open to everyone, and meant to be a better home for stories than the sites that came before it.</p>
-          <p>Writers keep their work on their own device and mirror it to an account. <mark><a href="#projects">Readers</a></mark> find that work on Home, save it to a Library, and talk to each other under each paragraph.</p>
+          <p>Writers keep their work on their own device and mirror it to an account. <mark><a href="/projects">Readers</a></mark> find that work on Home, save it to a Library, and talk to each other under each paragraph.</p>
           <p>It is best known for the <mark>Notebook</mark>, a writing desk with no cloud in the way, and for being <b>built by writers</b>.</p>
           <div class="say">"Write it down before it leaves." <b>- the founders</b></div>
 
@@ -277,13 +270,13 @@ footer a { color:var(--muted); }
             <li><b>Comments</b> on single paragraphs</li>
           </ul>
 
-          <div class="cat">Categories: <a href="#projects">Platforms</a><a href="#projects">Writing tools</a><a href="#goals">Communities</a></div>
+          <div class="cat">Categories: <a href="/projects">Platforms</a><a href="/projects">Writing tools</a><a href="/goals">Communities</a></div>
         </div>
 
         <aside class="info">
           <section>
             <span class="tag">Locuust</span>
-            <div class="row"><em>Locust</em> (<a href="#misspelling">misspelling</a>), the writing platform</div>
+            <div class="row"><em>Locust</em> (<a href="/misspelling">misspelling</a>), the writing platform</div>
             <div class="row"><b style="color:#fff">A public library of serials.</b></div>
           </section>
           <section>
@@ -311,20 +304,20 @@ footer a { color:var(--muted); }
         <p>Everything built under the <mark>Locuust</mark> name.</p>
         <div class="cards">
           <a class="card" href="https://locuust.com"><span class="k">Web</span><b>Locuust</b><span>The writing platform itself.</span></a>
-          <a class="card" href="#android"><span class="k">Android</span><b>The app</b><span>The Notebook, offline.</span></a>
-          <a class="card" href="#guide"><span class="k">Wiki</span><b>This wiki</b><span>What you are reading.</span></a>
+          <a class="card" href="/android"><span class="k">Android</span><b>The app</b><span>The Notebook, offline.</span></a>
+          <a class="card" href="/guide"><span class="k">Wiki</span><b>This wiki</b><span>What you are reading.</span></a>
         </div>
         <h2>Status</h2>
         <div class="scroll"><table>
           <thead><tr><th>Project</th><th>Role</th><th>Status</th></tr></thead>
           <tbody>
             <tr><td><a href="https://locuust.com">Locuust</a></td><td>Writing platform</td><td><span class="chip ok">Live</span></td></tr>
-            <tr><td><a href="#android">Android app</a></td><td>Offline Notebook</td><td><span class="chip ok">Live</span></td></tr>
-            <tr><td><a href="#ios">iOS app</a></td><td>Offline Notebook</td><td><span class="chip warn">Planned</span></td></tr>
+            <tr><td><a href="/android">Android app</a></td><td>Offline Notebook</td><td><span class="chip ok">Live</span></td></tr>
+            <tr><td><a href="/ios">iOS app</a></td><td>Offline Notebook</td><td><span class="chip warn">Planned</span></td></tr>
           </tbody>
         </table></div>
-        <div class="note"><b>Note</b><p>A <a href="#missing" class="red">red link</a> is a page nobody has written yet. It still goes somewhere: to <a href="#notfound">a page that says so</a>.</p></div>
-        <div class="cat">Categories: <a href="#home">Platforms</a><a href="#home">Writing tools</a></div>
+        <div class="note"><b>Note</b><p>A <a href="/missing" class="red">red link</a> is a page nobody has written yet. It still goes somewhere: to <a href="/notfound">a page that says so</a>.</p></div>
+        <div class="cat">Categories: <a href="/">Platforms</a><a href="/">Writing tools</a></div>
       </div></div>
     </article>
 
@@ -341,7 +334,7 @@ footer a { color:var(--muted); }
         </ol>
         <h3>A verse for you, traveller</h3>
         <blockquote>Put your own words here. <b>- whoever wrote them</b></blockquote>
-        <div class="cat">Categories: <a href="#home">Communities</a></div>
+        <div class="cat">Categories: <a href="/">Communities</a></div>
       </div></div>
     </article>
 
@@ -353,7 +346,7 @@ footer a { color:var(--muted); }
         <p>Every piece this wiki has. Copy the markup from this file's source; each block is plain HTML.</p>
 
         <h2>Text</h2>
-        <p>Body text with a <a href="#guide">wiki link</a>, an <a href="https://locuust.com">outside link</a>, a <a href="#missing" class="red">red link</a>, a <mark>highlighted name</mark>, <b>bold</b>, <em>italic</em> and <code>code</code>.</p>
+        <p>Body text with a <a href="/guide">wiki link</a>, an <a href="https://locuust.com">outside link</a>, a <a href="/missing" class="red">red link</a>, a <mark>highlighted name</mark>, <b>bold</b>, <em>italic</em> and <code>code</code>.</p>
         <h3>A sub-section</h3>
         <h4>A small label</h4>
         <blockquote>A quote from the story, set off in violet.</blockquote>
@@ -367,29 +360,29 @@ footer a { color:var(--muted); }
         <div class="note ok"><b>Canon</b><p>Confirmed by the writer.</p></div>
 
         <h2>Spoilers</h2>
-        <details class="spoiler"><summary>Spoiler: what happens in part 12</summary><div>Write the spoiler here. It can hold several paragraphs and <a href="#guide">links</a>.</div></details>
+        <details class="spoiler"><summary>Spoiler: what happens in part 12</summary><div>Write the spoiler here. It can hold several paragraphs and <a href="/guide">links</a>.</div></details>
         <p>The killer turns out to be <span class="hide" tabindex="0">the narrator</span>.</p>
 
         <h2>Chips</h2>
         <div class="chips">
-          <a class="chip" href="#tags">Fantasy</a><a class="chip" href="#tags">Slow burn</a>
+          <a class="chip" href="/tags">Fantasy</a><a class="chip" href="/tags">Slow burn</a>
           <span class="chip ok">Complete</span><span class="chip warn">On hiatus</span><span class="chip danger">Mature</span>
         </div>
 
         <h2>Cards</h2>
         <div class="cards">
-          <a class="card" href="#characters"><span class="k">Who</span><b>Characters</b><span>Everyone in the stories.</span></a>
-          <a class="card" href="#places"><span class="k">Where</span><b>Places</b><span>Maps and cities.</span></a>
-          <a class="card" href="#timeline"><span class="k">When</span><b>Timeline</b><span>What happened, in order.</span></a>
+          <a class="card" href="/characters"><span class="k">Who</span><b>Characters</b><span>Everyone in the stories.</span></a>
+          <a class="card" href="/places"><span class="k">Where</span><b>Places</b><span>Maps and cities.</span></a>
+          <a class="card" href="/timeline"><span class="k">When</span><b>Timeline</b><span>What happened, in order.</span></a>
         </div>
 
         <h2>Buttons</h2>
-        <p><a class="btn pri" href="https://locuust.com">Open Locuust</a> <a class="btn" href="#home">Back to the main page</a></p>
+        <p><a class="btn pri" href="https://locuust.com">Open Locuust</a> <a class="btn" href="/">Back to the main page</a></p>
 
         <h2>Table</h2>
         <div class="scroll"><table>
           <thead><tr><th>Part</th><th>Title</th><th>Released</th></tr></thead>
-          <tbody><tr><td>1</td><td><a href="#guide">The Lamp</a></td><td>2026-10-01</td></tr><tr><td>2</td><td>Oil</td><td>2026-10-04</td></tr></tbody>
+          <tbody><tr><td>1</td><td><a href="/guide">The Lamp</a></td><td>2026-10-01</td></tr><tr><td>2</td><td>Oil</td><td>2026-10-04</td></tr></tbody>
         </table></div>
 
         <h2>Infobox</h2>
@@ -405,7 +398,7 @@ footer a { color:var(--muted); }
         <p>A claim that needs a source.<sup><a href="#ref1">[1]</a></sup></p>
         <div class="refs"><ol><li id="ref1">Part 3, "The Lamp". <a href="https://locuust.com">Locuust</a>.</li></ol></div>
 
-        <div class="cat">Categories: <a href="#home">Wiki</a><a href="#home">Help</a></div>
+        <div class="cat">Categories: <a href="/">Wiki</a><a href="/">Help</a></div>
       </div></div>
     </article>
 
@@ -413,84 +406,84 @@ footer a { color:var(--muted); }
     <article class="pg" id="android" data-nav="projects">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Part of <a href="#projects">Projects</a></div>
+        <div class="hat">Part of <a href="/projects">Projects</a></div>
         <h1 class="title">Android app</h1>
         <p>The <mark>Notebook</mark> in your pocket. Stories are kept as files on the phone and mirrored to the account afterwards, so a bad connection never costs writing.</p>
         <h2>What it does</h2>
         <ul><li>Writes with no connection at all</li><li>Mirrors to the account when it can</li><li>Rings when someone follows, comments or asks you to write together</li></ul>
         <div class="note warn"><b>Careful</b><p>Uninstalling the app deletes the writing stored on the phone. Sign in and let it mirror first.</p></div>
-        <div class="cat">Categories: <a href="#projects">Platforms</a></div>
+        <div class="cat">Categories: <a href="/projects">Platforms</a></div>
       </div></div>
     </article>
 
     <article class="pg" id="ios" data-nav="projects">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Part of <a href="#projects">Projects</a></div>
+        <div class="hat">Part of <a href="/projects">Projects</a></div>
         <h1 class="title">iOS app</h1>
         <p>Planned, with the same offline Notebook as the Android app. Until then the <a href="https://locuust.com">website</a> works in a phone's browser.</p>
         <div class="chips"><span class="chip warn">Planned</span></div>
-        <div class="cat">Categories: <a href="#projects">Platforms</a></div>
+        <div class="cat">Categories: <a href="/projects">Platforms</a></div>
       </div></div>
     </article>
 
     <article class="pg" id="misspelling" data-nav="home">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Redirected from "Locust". Back to <a href="#home">Locuust</a></div>
+        <div class="hat">Redirected from "Locust". Back to <a href="/">Locuust</a></div>
         <h1 class="title">Locust</h1>
         <p>The app was first called Locust. The site is spelled <b>Locuust</b>, with two u's, and "Locust" with one is the misspelling you will see most.</p>
-        <div class="cat">Categories: <a href="#home">Platforms</a></div>
+        <div class="cat">Categories: <a href="/">Platforms</a></div>
       </div></div>
     </article>
 
     <article class="pg" id="characters" data-nav="guide">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Part of the <a href="#guide">Style guide</a></div>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
         <h1 class="title">Characters</h1>
         <p>An example listing page. Each row would open that character's own page, with an infobox.</p>
         <div class="scroll"><table>
           <thead><tr><th>Name</th><th>Role</th><th>First seen</th></tr></thead>
-          <tbody><tr><td><a href="#notfound">Example one</a></td><td>Lead</td><td>Part 1</td></tr><tr><td><a href="#notfound">Example two</a></td><td>Rival</td><td>Part 3</td></tr></tbody>
+          <tbody><tr><td><a href="/notfound">Example one</a></td><td>Lead</td><td>Part 1</td></tr><tr><td><a href="/notfound">Example two</a></td><td>Rival</td><td>Part 3</td></tr></tbody>
         </table></div>
-        <div class="cat">Categories: <a href="#guide">Wiki</a></div>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
       </div></div>
     </article>
 
     <article class="pg" id="places" data-nav="guide">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Part of the <a href="#guide">Style guide</a></div>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
         <h1 class="title">Places</h1>
         <p>An example listing page for maps, cities and rooms.</p>
         <div class="cards">
-          <a class="card" href="#notfound"><span class="k">City</span><b>Example city</b><span>Where it starts.</span></a>
-          <a class="card" href="#notfound"><span class="k">Room</span><b>Example room</b><span>Where it ends.</span></a>
+          <a class="card" href="/notfound"><span class="k">City</span><b>Example city</b><span>Where it starts.</span></a>
+          <a class="card" href="/notfound"><span class="k">Room</span><b>Example room</b><span>Where it ends.</span></a>
         </div>
-        <div class="cat">Categories: <a href="#guide">Wiki</a></div>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
       </div></div>
     </article>
 
     <article class="pg" id="timeline" data-nav="guide">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Part of the <a href="#guide">Style guide</a></div>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
         <h1 class="title">Timeline</h1>
         <p>An example timeline, in order.</p>
-        <ol><li><b>Year 1</b> - the first thing happens.</li><li><b>Year 2</b> - the second thing happens, and <a href="#characters">someone</a> is there.</li><li><b>Year 3</b> - <a href="#places">somewhere</a> changes.</li></ol>
-        <div class="cat">Categories: <a href="#guide">Wiki</a></div>
+        <ol><li><b>Year 1</b> - the first thing happens.</li><li><b>Year 2</b> - the second thing happens, and <a href="/characters">someone</a> is there.</li><li><b>Year 3</b> - <a href="/places">somewhere</a> changes.</li></ol>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
       </div></div>
     </article>
 
     <article class="pg" id="tags" data-nav="guide">
       <div class="layout solo"><div>
         <p class="from">From Locuust, the free library.</p>
-        <div class="hat">Part of the <a href="#guide">Style guide</a></div>
+        <div class="hat">Part of the <a href="/guide">Style guide</a></div>
         <h1 class="title">Tags</h1>
         <p>A tag groups stories. On <a href="https://locuust.com">Locuust</a> every tag has its own page of stories, best first.</p>
         <div class="chips"><span class="chip">Fantasy</span><span class="chip">Slow burn</span><span class="chip ok">Complete</span><span class="chip warn">On hiatus</span><span class="chip danger">Mature</span></div>
-        <div class="cat">Categories: <a href="#guide">Wiki</a></div>
+        <div class="cat">Categories: <a href="/guide">Wiki</a></div>
       </div></div>
     </article>
 
@@ -500,11 +493,11 @@ footer a { color:var(--muted); }
         <p class="from">From Locuust, the free library.</p>
         <h1 class="title">This page does not exist yet</h1>
         <p>There is nothing at <code id="nfaddr">this address</code>. Nobody has written it, or the link is wrong.</p>
-        <div class="note"><b>Want it written?</b><p>Tell whoever runs this wiki which page you were looking for. Until it exists, <a href="#home">the main page</a> is the way back.</p></div>
+        <div class="note"><b>Want it written?</b><p>Tell whoever runs this wiki which page you were looking for. Until it exists, <a href="/">the main page</a> is the way back.</p></div>
         <div class="cards">
-          <a class="card" href="#home"><span class="k">Start</span><b>Main page</b><span>Locuust, in short.</span></a>
-          <a class="card" href="#projects"><span class="k">Browse</span><b>Projects</b><span>What has been built.</span></a>
-          <a class="card" href="#guide"><span class="k">Help</span><b>Style guide</b><span>Every piece of this wiki.</span></a>
+          <a class="card" href="/"><span class="k">Start</span><b>Main page</b><span>Locuust, in short.</span></a>
+          <a class="card" href="/projects"><span class="k">Browse</span><b>Projects</b><span>What has been built.</span></a>
+          <a class="card" href="/guide"><span class="k">Help</span><b>Style guide</b><span>Every piece of this wiki.</span></a>
         </div>
       </div></div>
     </article>
@@ -515,34 +508,41 @@ footer a { color:var(--muted); }
 </div>
 
 <script>
-/* Every address gets an answer. A known page is shown; a part of a page (a
-   heading, a reference) shows the page it is on and scrolls there; anything
-   else shows "does not exist yet". Without script the four main pages still
-   work by :target. */
+/* Pages are paths: /projects, /guide ... Each is also a real file, so this only
+   keeps the address bar honest while you click around, and answers every
+   address that is not a page with "does not exist yet". Parts of a page
+   (#overview, #ref1) stay hashes. */
 (function () {
   var d = document, root = d.documentElement;
   root.classList.add('js');
   var pages = [].slice.call(d.querySelectorAll('.pg'));
   var links = [].slice.call(d.querySelectorAll('.nav a'));
   var current = null;
+  function find(id) { var e = id && d.getElementById(id); return e && e.classList.contains('pg') ? e : null; }
+  function pathId() {
+    var p = location.pathname.replace(/\/index\.html$/, '').replace(/\.html$/, '').replace(/^\/+|\/+$/g, '');
+    try { p = decodeURIComponent(p); } catch (e) {}
+    return p;
+  }
   function show() {
-    var id = '';
-    try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { id = location.hash.slice(1); }
-    var el = id ? d.getElementById(id) : null;
-    var pg;
-    if (!id) pg = d.getElementById('home');
-    else if (id === 'missing') pg = d.getElementById('notfound');
-    else if (el && el.classList.contains('pg')) pg = el;
-    else if (el && el.closest('.pg')) pg = el.closest('.pg');
-    else if (el) pg = current;
-    else pg = d.getElementById('notfound');
-    if (!pg) pg = d.getElementById('home');
+    var id = pathId();
+    var hash = location.hash.slice(1);
+    /* an old-style address, /#projects, becomes /projects */
+    if (!id && find(hash)) { history.replaceState(null, '', hash === 'home' ? '/' : '/' + hash); id = hash === 'home' ? '' : hash; hash = ''; }
+    var pg = !id ? find('home') : id === 'missing' ? null : find(id);
+    var real = !!pg && pg.id !== 'notfound';
+    if (!pg) pg = find('notfound');
     if (pg.id === 'notfound') {
       var a = d.getElementById('nfaddr');
-      if (a) a.textContent = id && id !== 'missing' ? '#' + id : 'a page that has not been written';
+      if (a) a.textContent = id && id !== 'missing' ? location.pathname : 'a page that has not been written';
+    } else {
+      /* /projects/ and /projects.html read as /projects */
+      var want = pg.id === 'home' ? '/' : '/' + pg.id;
+      if (location.pathname !== want) history.replaceState(null, '', want + location.hash);
     }
     pages.forEach(function (p) { p.classList.toggle('on', p === pg); });
-    var key = '#' + (pg.getAttribute('data-nav') || pg.id);
+    var nav = pg.getAttribute('data-nav') || pg.id;
+    var key = nav === 'home' ? '/' : '/' + nav;
     links.forEach(function (l) {
       if (l.getAttribute('href') === key) l.setAttribute('aria-current', 'page'); else l.removeAttribute('aria-current');
     });
@@ -550,9 +550,21 @@ footer a { color:var(--muted); }
     d.title = (h ? h.textContent + ' - ' : '') + 'Locuust Wiki';
     var changed = pg !== current;
     current = pg;
-    if (el && el !== pg && el.closest('.pg') === pg) el.scrollIntoView();
+    var el = hash ? d.getElementById(hash) : null;
+    if (el && pg.contains(el)) el.scrollIntoView();
     else if (changed) window.scrollTo(0, 0);
   }
+  d.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.target || a.hasAttribute('download')) return;
+    var href = a.getAttribute('href');
+    if (href.charAt(0) !== '/' || href.charAt(1) === '/') return;
+    e.preventDefault();
+    if (href !== location.pathname + location.hash) history.pushState(null, '', href);
+    show();
+  });
+  window.addEventListener('popstate', show);
   window.addEventListener('hashchange', show);
   show();
 })();
